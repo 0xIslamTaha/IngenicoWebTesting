@@ -8,13 +8,15 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 import org.junit.Test;
 import com.google.gson.*;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.concurrent.TimeUnit ;
 
 
 public class TestIngenicoWebTesting {
@@ -78,5 +80,26 @@ public class TestIngenicoWebTesting {
 
         WebDriver driver=new ChromeDriver();
         driver.get(URL);
+        driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+        WebDriverWait wait = new WebDriverWait(driver,30);
+        driver.manage().window().maximize();
+
+        List<WebElement> paymentMethods =   driver.findElement(By.id("paymentoptionslist")).findElements(By.tagName("li"));
+        for (WebElement paymentElement : paymentMethods){
+            if (paymentElement.getText().equals("MasterCard Debit")){
+                System.out.println(paymentElement.getText());
+                paymentElement.click();
+                break;
+            }
+        }
+
+        WebElement cardNumber =  wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("cardNumber")));
+        cardNumber.sendKeys("5399 9999 9999 9999");
+
+        driver.findElement(By.id("expiryDate")).clear();
+        driver.findElement(By.id("expiryDate")).sendKeys("11/21");
+        driver.findElement(By.id("cvv")).clear();
+        driver.findElement(By.id("cvv")).sendKeys("585");
+        driver.findElement(By.id("primaryButton")).click();
     }
 }
