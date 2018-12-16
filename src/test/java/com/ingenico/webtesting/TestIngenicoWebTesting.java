@@ -31,11 +31,10 @@ public class TestIngenicoWebTesting {
         requestHeaderList.add(new RequestHeader("X-GCS-MessageId", "6480071e-039d-4dca-a966-4ce3c1bc201b"));
         requestHeaderList.add(new RequestHeader("X-GCS-RequestId", "1cc6daff-a305-4d7b-94b0-c580fd5ba6b4"));
 
-        String myUrl = "https://eu.sandbox.api-ingenico.com/v1/3142/hostedcheckouts";
-        URI uriss = new URI(myUrl);
+        URI url = new URI("https://eu.sandbox.api-ingenico.com/v1/3142/hostedcheckouts");
 
         String authenticationSignature = authenticator.createSimpleAuthenticationSignature("POST",
-                uriss, requestHeaderList);
+                url, requestHeaderList);
 
         RestAssured.baseURI ="https://eu.sandbox.api-ingenico.com/v1/3142";
         RequestSpecification request = RestAssured.given();
